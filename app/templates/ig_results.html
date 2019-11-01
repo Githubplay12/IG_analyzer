@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+
+{% block app_content %}
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-img-top d-flex align-items-center bg-light">
+                    <div>
+                        <img class="img-fluid" src="{{ fresh_data.get('profil_pic') }}" alt="lel">
+                    </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ username.capitalize() }}</h5>
+                            <p class="card-text">&nbsp;&nbsp;&nbsp;{{ fresh_data.get('full_name') }}</p>
+                        </div>
+                </div>
+            </div>
+        </div>
+            <div class="col">
+              <ul class="list-group">
+                <li class="list-group-item">Followers : {{ fresh_data.get('followers') }}</li>
+                <li class="list-group-item">Average Likes : {{ fresh_data.get('avg_likes') }}</li>
+                <li class="list-group-item">Average Comments : {{ fresh_data.get('avg_comments') }}</li>
+                <li class="list-group-item">Engagement (From likes) : {{ fresh_data.get('engagement') }}</li>
+              </ul>
+            </div>
+        </div>
+
+
+
+    <br>
+
+    <div class="row">
+        <div class="col-8">
+            <canvas id="myChart"></canvas>
+        </div>
+        <div class="col-4 align-self-center">
+            <table class="table table-dark">
+                <thead>
+                    <tr>
+                        <th scope="col">Followers Difference (compared to yesterday)</th>
+                        <th scope="col">Followers Difference (All Time)</th>
+                    </tr>
+                </thead>
+                <tr>
+                    <td>{{ stats.get('oneday_followers_diff') }}</td>
+                    <td>{{ stats.get('alltime_followers_diff') }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <br>
+        <div class="row">
+            <div class="col-8">
+                <canvas id="myChart2"></canvas>
+            </div>
+            <div class="col-4 align-self-center">
+                <table class="table table-dark">
+                    <thead>
+                        <tr>
+                            <th scope="col">Average Likes Difference (compared to yesterday)</th>
+                            <th scope="col">Average Likes Difference (All Time)</th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td>{{ stats.get('oneday_avglikes_diff') }}</td>
+                        <td>{{ stats.get('alltime_avglikes_diff') }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    <script>
+
+        Chart.defaults.global.elements.line.fill = false;
+        let myChart = document.getElementById("myChart");
+        let followChart = new Chart(myChart, {
+            type: 'line',
+
+            data: {
+                labels: {{ dates | tojson }},
+                datasets:  [
+                {
+                    label: `# Of Followers ` ,
+                    borderColor: "#3e95cd",
+                    data: {{ followers | tojson }},
+                    yAxisID: 'A',
+                }
+
+                            ]
+            },
+            options:
+            {
+                animation: false,
+                scales:
+                {
+                    yAxes:
+                    [
+                        {
+                        id : 'A',
+                        position : 'left',
+                        }
+                    ],
+                    {#xAxes:
+                        [
+                            {
+                            #}{#scaleLabel: {
+                                display: true,
+                                labelString: "Followers Difference : {{ stats.get('oneday_followers') }}",
+                                fontSize: 15,
+                                fontStyle: 'bold',
+                                padding: 10#}{#
+                            }
+                            }
+                        ]#}
+                },
+                legend: {
+                    display: true,
+                    labels: {
+                        fontColor: '#3e95cd',
+
+
+                    },
+
+                }
+            }
+        });
+    </script>
+
+    <script>
+
+        Chart.defaults.global.elements.line.fill = false;
+        let myChart2 = document.getElementById("myChart2");
+        let egmtChart = new Chart(myChart2, {
+            type: 'line',
+
+            data: {
+                labels: {{ dates | tojson }},
+                datasets:  [
+                {
+                    label: 'Average Likes',
+                    borderColor: "#FF0000",
+                    data: {{ avg_likes | tojson }},
+                    yAxisID: 'A',
+                }
+
+                            ]
+            },
+            options:
+            {
+                animation: false,
+                scales:
+                {
+                    yAxes:
+                    [
+                        {
+                        id : 'A',
+                        position : 'left',
+
+                        }
+
+                    ],
+                    {#xAxes:
+                        [
+                            {
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Average Likes : {{ stats.get('oneday_avglikes') }} | Engagement : {{ stats.get('oneday_engagement') }}",
+                                fontSize: 15,
+                                fontStyle: 'bold',
+                                padding: 10
+                            }
+                            }
+                        ]#}
+                },
+                legend: {
+                    display: true,
+                    labels: {
+                        fontColor: '#FF0000',
+
+                    },
+
+                }
+            }
+        });
+    </script>
+
+{% endblock %}

@@ -5,14 +5,14 @@ import re
 from bs4 import BeautifulSoup
 
 
-# PhantomJs : r"C:\Users\CARBON\Desktop\Downloads\Webdrivers\phantomjs-2.1.1-windows\bin\phantomjs.exe"
-# Chromedriver : r"C:\Users\CARBON\Desktop\Downloads\Webdrivers\chromedriver.exe"
+# PhantomJs : "YourphantomJSlink"
+# Chromedriver : "your Chromedriver link"
 
 # Avg nb like / last 12 pictures
 # Avg nb comments / last 12 pictures
 # Nb followers
 # Nb followings
-#
+
 
 class IGTracker():
 
@@ -70,7 +70,7 @@ class IGTracker():
 # Solution 1 : using selenium to extract data from html
         options = Options()
         options.add_argument('--headless')
-        self.driver = webdriver.Chrome(r"C:\\Users\CARBON\Desktop\Downloads\Webdrivers\chromedriver.exe", chrome_options=options)
+        self.driver = webdriver.Chrome("Chromedriverlinkhere", chrome_options=options)
         self.driver.get(profil_url)
         
         self.profil_soup = BeautifulSoup(self.driver.page_source, 'html.parser')
